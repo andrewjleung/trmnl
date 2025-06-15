@@ -1,0 +1,51 @@
+<div class="view view--full">
+  <div class="layout layout--col layout--left layout--top">
+    <div class="border--h-1">
+    <span class="title">
+      {% if workouts.size < 0 %}
+        No workouts 🙁
+      {% else %}
+        {{ workouts[0].title }} on {{ workouts[0].start_time | date: "%s" | plus: trmnl.user.utc_offset | date: "%A, %B %d at %l:%M%p" }} 
+      {% endif %}
+    </span>
+    </div>
+
+
+    {% for exercise in workouts[0].exercises %}
+      <div class="item">
+        <div class="meta">
+          <span class="index">{{ forloop.index }}</span>
+        </div>
+        <div class="content">
+          <span class="title title--small">{{ exercise.title }}</span>
+          {% if exercise.notes %}
+            <span class="description">{{ exercise.notes != "" }}</span>
+          {% endif %} 
+          <div class="flex gap--small">
+            {% assign warmups = exercise.sets | where: "type", "warmup" %}
+            {% assign normal_sets = exercise.sets | where: "type", "normal" %}
+
+            {% if warmups.size > 0 %}
+              <span class="label label--small">
+                Warmup {{ warmups.size }}
+              </span>
+            {% endif %} 
+
+            {% if normal_sets.size > 0 %}
+              <span class="label label--small">
+                Normal {{ normal_sets.size }}
+              </span>
+            {% endif %} 
+            {% comment %} <span class="label label--small label--underline">{{ exercise }}</span> {% endcomment %}
+            {% comment %} <span class="label label--small label--underline">Confirmed</span> {% endcomment %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="title_bar">
+    <img class="image" src="/images/plugins/trmnl--render.svg" />
+    <span class="title">Hevy</span>
+    <span class="instance">Instance</span>
+  </div>
+</div>

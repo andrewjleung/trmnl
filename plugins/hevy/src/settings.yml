@@ -1,0 +1,22 @@
+#
+# Changes to this file will be overwritten by `trmnlp pull`.
+#
+# Docs: https://help.usetrmnl.com/en/articles/10542599-importing-and-exporting-private-plugins#h_581fb988f0
+#
+---
+name: Hevy
+strategy: polling
+refresh_interval: 1440
+
+polling_verb: get
+polling_url: "https://api.hevyapp.com/v1/workouts?page=1&pageSize=1"
+polling_headers: "accept=application/json&api-key={{ api_key }}"
+
+no_screen_padding: "no"
+dark_mode: "no"
+
+custom_fields:
+  - keyname: api_key
+    name: API Key
+    field_type: string
+    description: Hevy API key

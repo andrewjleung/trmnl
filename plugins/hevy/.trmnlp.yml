@@ -1,0 +1,23 @@
+# TRMNLP configuration
+# {{ env.VARIABLE }} interpolation is available here
+---
+# auto-reload when files change (`watch: false` to disable)
+watch:
+  - .trmnlp.yml
+  - src
+
+# values of custom fields (defined in src/settings.yml)
+custom_fields:
+  api_key: "{{ env.HEVY_API_KEY }}"
+
+# override variables
+variables:
+  trmnl:
+    user:
+      name: "Andrew Leung"
+      first_name: "Andrew"
+      last_name: "Leung"
+      locale: "en"
+      time_zone: "CST"
+      time_zone_iana: "America/Chicago"
+      utc_offset: -21600

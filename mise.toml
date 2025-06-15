@@ -1,6 +1,9 @@
 [tools]
 ruby = '3.4'
 
+[env]
+_.file = '.env'
+
 [tasks."bundle:install"]
 description = "Install gem dependencies"
 run = "bundle install"
