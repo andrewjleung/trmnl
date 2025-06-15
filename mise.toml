@@ -1,0 +1,25 @@
+[tools]
+ruby = '3.4'
+
+[tasks."bundle:install"]
+description = "Install gem dependencies"
+run = "bundle install"
+
+[tasks.init]
+description = "Initialize a new plugin"
+run = "trmnlp init"
+dir = "{{config_root}}/plugins"
+
+[tasks.server]
+description = "Start the TRMNL preview server"
+run = "trmnlp serve"
+dir = "{{cwd}}"
+
+[tasks.login]
+description = "Login to TMRNL"
+run = "trmnlp login"
+dir = "{{cwd}}"
+
+[tasks.push]
+description = "Push plugin to the TRMNL server for display"
+dir = "{{cwd}}"
