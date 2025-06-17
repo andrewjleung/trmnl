@@ -1,48 +1,43 @@
 <div class="view view--full">
-  <div class="layout layout--col layout--left layout--top">
-    <div class="border--h-1">
+  <div class="layout layout--col layout--left">
     <span class="title">
       {% if workouts.size < 0 %}
         No workouts 🙁
       {% else %}
-        {{ workouts[0].title }} on {{ workouts[0].start_time | date: "%s" | plus: trmnl.user.utc_offset | date: "%A, %B %d at %l:%M%p" }} 
+        {{ workouts[0].title }} {{ workouts[0].start_time | date: "%s" | plus: trmnl.user.utc_offset | date: "%a, %B %d at %l:%M%p" }} 
       {% endif %}
     </span>
-    </div>
 
+    <div class="list" data-list-limit="true" data-list-hidden-count="true" data-list-max-columns="2">
+      {% for exercise in workouts[0].exercises %}
+        <div class="item">
+          <div class="meta">
+            <span class="index">{{ forloop.index }}</span>
+          </div>
+          <div class="content">
+            <span class="title">{{ exercise.title }}</span>
 
-    {% for exercise in workouts[0].exercises %}
-      <div class="item">
-        <div class="meta">
-          <span class="index">{{ forloop.index }}</span>
-        </div>
-        <div class="content">
-          <span class="title title--small">{{ exercise.title }}</span>
-          {% if exercise.notes %}
-            <span class="description">{{ exercise.notes != "" }}</span>
-          {% endif %} 
-          <div class="flex gap--small">
-            {% assign warmups = exercise.sets | where: "type", "warmup" %}
             {% assign normal_sets = exercise.sets | where: "type", "normal" %}
-
-            {% if warmups.size > 0 %}
-              <span class="label label--small">
-                Warmup {{ warmups.size }}
-              </span>
-            {% endif %} 
-
             {% if normal_sets.size > 0 %}
-              <span class="label label--small">
-                Normal {{ normal_sets.size }}
-              </span>
+              <div class="flex gap--small">
+                {% for set in normal_sets  %}
+                  {% comment %} handle distance/duration {% endcomment %}
+                  <span class="label label--inverted">
+                    {{ set.weight_kg | times: 2.2046226218 | round }} x {{ set.reps }} @ {{ set.rpe }}
+                  </span>
+                {% endfor %}
+              </div>
             {% endif %} 
-            {% comment %} <span class="label label--small label--underline">{{ exercise }}</span> {% endcomment %}
-            {% comment %} <span class="label label--small label--underline">Confirmed</span> {% endcomment %}
+
+            {% if exercise.notes %}
+              <span class="description">{{ exercise.notes != "" }}</span>
+            {% endif %} 
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
+
   <div class="title_bar">
     <img class="image" src="/images/plugins/trmnl--render.svg" />
     <span class="title">Hevy</span>
