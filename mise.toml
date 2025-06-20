@@ -25,4 +25,5 @@ dir = "{{cwd}}"
 
 [tasks.push]
 description = "Push plugin to the TRMNL server for display"
+run = "trmnlp push"
 dir = "{{cwd}}"
