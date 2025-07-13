@@ -9,52 +9,30 @@
       </span>
     {% else %}
 
-      <div class="grid grid--cols-4">
-        <div class="col--span-1 flex flex--col flex--center">
-          <span class="title title--small">
-            {{ workouts[0].title }} 
-          </span>
-          <span class="description">
-            {{ workouts[0].start_time | date: "%s" | plus: trmnl.user.utc_offset | date: "%a, %B %d at %l:%M%p" }} 
-          </span>
-        </div>
+      <div class="list" data-list-max-height="150" data-list-limit="true" data-list-hidden-count="true" data-list-max-columns="2">
+        {% for exercise in workouts[0].exercises %}
+          <div class="item">
+            <div class="meta">
+              <span class="index">{{ forloop.index }}</span>
+            </div>
+            <div class="content">
+              <span class="title title--small">{{ exercise.title }}</span>
 
-        <div class="col--span-3">
-          <div class="list" data-list-max-height="150" data-list-limit="true" data-list-hidden-count="true" data-list-max-columns="2">
-            {% for exercise in workouts[0].exercises %}
-              <div class="item">
-                <div class="meta">
-                  <span class="index">{{ forloop.index }}</span>
+              {% assign normal_sets = exercise.sets | where: "type", "normal" %}
+              {% if normal_sets.size > 0 %}
+                <div class="flex gap--small">
+                  {% for set in normal_sets  %}
+                    {% comment %} handle distance/duration {% endcomment %}
+                    {% render "set", set: set, small: true %}
+                  {% endfor %}
                 </div>
-                <div class="content">
-                  <span class="title title--small">{{ exercise.title }}</span>
-
-                  {% assign normal_sets = exercise.sets | where: "type", "normal" %}
-                  {% if normal_sets.size > 0 %}
-                    <div class="flex gap--small">
-                      {% for set in normal_sets  %}
-                        {% comment %} handle distance/duration {% endcomment %}
-                        <span class="label label--small label--inverted">
-                          {{ set.weight_kg | times: 2.2046226218 | round }} x {{ set.reps }} 
-                          {% if set.rpe %}
-                            @ {{ set.rpe }}
-                          {% endif %}
-                        </span>
-                      {% endfor %}
-                    </div>
-                  {% endif %} 
-                </div>
-              </div>
-            {% endfor %}
+              {% endif %} 
+            </div>
           </div>
-        </div>
+        {% endfor %}
       </div>
     {% endif %}
   </div>
 
-  <div class="title_bar">
-    <img class="image-dither" style="border-radius:100%;transform:scale(0.7)" src="https://www.hevyapp.com/favicon.ico" />
-    <span class="title">Hevy</span>
-    <span class="instance">{{ trmnl.plugin_settings.instance_name }}</span>
-  </div>
+  {% render "title_bar", trmnl: trmnl, workouts: workouts %}
 </div>
