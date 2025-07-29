@@ -11,6 +11,8 @@ custom_fields:
   id: "dd60512aa081d8b38fff4ddbbd364a54"
   gym_id: "FTW"
 
+time_zone: America/Chicago
+
 # override variables
 variables:
   trmnl:
