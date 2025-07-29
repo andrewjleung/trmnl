@@ -23,6 +23,11 @@ description = "Login to TMRNL"
 run = "trmnlp login"
 dir = "{{cwd}}"
 
+[tasks.clone]
+description = "Clone an existing plugin"
+run = "trmnlp clone"
+dir = "{{config_root}}/plugins"
+
 [tasks.push]
 description = "Push plugin to the TRMNL server for display"
 run = "trmnlp push"

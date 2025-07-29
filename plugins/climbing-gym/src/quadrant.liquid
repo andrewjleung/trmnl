@@ -1,0 +1,146 @@
+<!-- import Highcharts libraries -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/pattern-fill.js"></script>
+
+<div class="view">
+    <div class="w-full b-h-gray-5"></div>
+        <div class="grid grid--cols-1">
+            <div id="main_gauge" class="w--auto mt--5"></div>
+        <div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  function createGauge(elem_id, count, capacity, opts) {
+    Highcharts.chart(elem_id, {
+      chart: {
+        type: "gauge",
+        height: opts.height,
+        animation: false,
+      },
+
+      title: {
+        text: opts.title,
+      },
+
+      pane: {
+        startAngle: -150,
+        endAngle: 150,
+        background: {
+          backgroundColor: "transparent",
+          borderWidth: 0,
+        },
+      },
+
+      plotOptions: {
+        gauge: {
+          animation: false,
+          pivot: {
+            backgroundColor: "transparent",
+          },
+          dial: {
+            backgroundColor: "transparent",
+            baseWidth: 0,
+          },
+        },
+      },
+
+      credits: {
+          enabled: false
+      },
+
+      yAxis: {
+        min: 0,
+        max: capacity,
+        minorTickInterval: 0,
+        tickColor: "#ffffff",
+        tickLength: 100,
+        tickPixelInterval: opts.yAxis.tickPixelInterval || 100,
+        tickWidth: 0,
+        lineWidth: 0,
+        title: {
+          text: opts.yAxis.title,
+          style: {
+            color: "#000000",
+            fontFamily: "NicoPups",
+            fontSize: opts.yAxis.fontSize || "16px",
+          },
+        },
+        labels: {
+          ...opts.labels,
+          style: {
+            fontSize: "16px",
+          },
+        },
+        plotBands: [
+          {
+            from: 1,
+            to: count,
+            color: {
+              pattern: {
+                image: "https://usetrmnl.com/images/grayscale/gray-2.png",
+                width: 12,
+                height: 12,
+              },
+            },
+            innerRadius: "82%",
+            borderRadius: "60%",
+          },
+          {
+            from: count + 1,
+            to: 100,
+            color: {
+              pattern: {
+                image: "https://usetrmnl.com/images/grayscale/gray-5.png",
+                width: 12,
+                height: 12,
+              },
+            },
+            innerRadius: "82%",
+            borderRadius: "60%",
+          },
+        ],
+      },
+
+      series: [
+        {
+          name: "count",
+          data: [count],
+          dataLabels: {
+            borderWidth: 0,
+            y: opts.series.position || 0,
+            style: {
+              fontSize: opts.series.fontSize,
+              fontWeight: opts.series.fontWeight || "400",
+              fontFamily: opts.series.fontFamily || "inherit",
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  var count = {{ count | default 0 }};
+  var capacity = {{ capacity | default 0 }};
+
+  createGauge("main_gauge", count, capacity, {
+    height: "50%",
+    // tick marks
+    labels: {
+      distance: 15,
+    },
+    // center text
+    series: {
+      fontSize: "3em",
+      fontWeight: "400",
+      position: -15,
+    },
+    yAxis: {
+      title: "Current<br>Climbers",
+      fontSize: "18px",
+      tickPixelInterval: 45,
+    },
+  });
+</script>

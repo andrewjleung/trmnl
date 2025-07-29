@@ -1,0 +1,20 @@
+# TRMNLP configuration
+# {{ env.VARIABLE }} interpolation is available here
+---
+# auto-reload when files change (`watch: false` to disable)
+watch:
+  - .trmnlp.yml
+  - src
+
+# values of custom fields (defined in src/settings.yml)
+custom_fields:
+  id: "dd60512aa081d8b38fff4ddbbd364a54"
+  gym_id: "FTW"
+
+# override variables
+variables:
+  trmnl:
+    plugin_settings:
+      instance_name: "Movement Fort Worth"
+    user:
+      utc_offset: -21600
