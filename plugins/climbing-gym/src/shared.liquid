@@ -1,4 +1,4 @@
-{% template gauge %}
+{% template gauge_setup %}
 <!-- import Highcharts libraries -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
@@ -7,7 +7,7 @@
 <div class="layout layout--col layout--center-x">
   <div class="grid grid--cols-1">
     {% if count and capacity %}
-      <div id="main_gauge" class="w--auto mt--5"></div>
+      <div id="main_gauge" class="w--"></div>
     {% else %}
       <span class="title">Failed to fetch capacity from RockGymPro...</span>
     {% endif %}
@@ -70,12 +70,7 @@
             fontSize: opts.yAxis.fontSize || "16px",
           },
         },
-        labels: {
-          ...opts.labels,
-          style: {
-            fontSize: "16px",
-          },
-        },
+        labels: opts.labels,
         plotBands: [
           {
             from: 1,
@@ -126,26 +121,6 @@
 
   var count = {{ count | default 0 }};
   var capacity = {{ capacity | default 0 }};
-
-  createGauge("main_gauge", count, capacity, {
-    height: "56%",
-    // tick marks
-    labels: {
-      distance: 15,
-    },
-    // center text
-    series: {
-      fontSize: "4em",
-      fontWeight: "400",
-      position: -20,
-      fontFamily: "NicoClean"
-    },
-    yAxis: {
-      title: "Current<br>Climbers",
-      fontSize: "30px",
-      tickPixelInterval: 100,
-    },
-  });
 </script>
 {% endtemplate %}
 
@@ -158,7 +133,7 @@
   </span>
 
   <span class="instance">
-    Last updated {{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%I:%M%p" | }}
+    As of {{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%I:%M%p" | }}
   </span>
 </div>
 {% endtemplate %}
