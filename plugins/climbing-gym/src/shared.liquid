@@ -4,10 +4,12 @@
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/modules/pattern-fill.js"></script>
 
+{% capture element_id %}{{ trmnl.plugin_settings.instance_name | downcase | replace: " ", "_" | append: "_gauge" }}{% endcapture %}
+
 <div class="layout layout--col layout--center-x">
   <div class="grid grid--cols-1">
     {% if count and capacity %}
-      <div id="main_gauge" class="w--"></div>
+      <div id="{{ element_id }}" class="w--"></div>
     {% else %}
       <span class="title">Failed to fetch capacity from RockGymPro...</span>
     {% endif %}
@@ -15,8 +17,8 @@
 </div>
 
 <script type="text/javascript">
-  function createGauge(elem_id, count, capacity, opts) {
-    Highcharts.chart(elem_id, {
+  function createGauge(count, capacity, opts) {
+    Highcharts.chart("{{ element_id }}", {
       chart: {
         type: "gauge",
         height: opts.height,

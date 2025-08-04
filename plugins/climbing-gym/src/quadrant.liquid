@@ -1,9 +1,9 @@
 <div class="view view--half_quadrant">
-  {% render "gauge_setup", count: count, capacity: capacity %}
+  {% render "gauge_setup", trmnl: trmnl, count: count, capacity: capacity %}
   {% render "title_bar", trmnl: trmnl %}
 
   <script>
-    createGauge("main_gauge", count, capacity, {
+    createGauge(count, capacity, {
       height: "60%",
       // tick marks
       labels: {
