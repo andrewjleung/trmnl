@@ -1,0 +1,18 @@
+[package]
+name = "rock-gym-pro-capacity"
+version = "0.1.0"
+edition = "2021"
+authors = ["Andrew Leung <andrewleung104@gmail.com>"]
+
+[package.metadata.release]
+release = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+console_error_panic_hook = { version = "0.1.7" }
+reqwest = { version = "0.12" }
+scraper = { version = "0.23" }
+worker = { version = "0.6.1" }
+worker-macros = { version = "0.6" }
