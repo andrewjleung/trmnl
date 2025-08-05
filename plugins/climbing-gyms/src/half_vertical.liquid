@@ -1,0 +1,28 @@
+<div class="view view--half_vertical">
+  {% render "gauge_setup", trmnl: trmnl, count: count, capacity: capacity %}
+  {% render "title_bar", trmnl: trmnl %}
+
+  <script>
+    createGauge(count, capacity, {
+      height: "100%",
+      // tick marks
+      labels: {
+        distance: 23,
+        style: {
+          fontSize: "1.25em"
+        }
+      },
+      // center text
+      series: {
+        fontSize: "3em",
+        fontWeight: "550",
+        fontFamily: "NicoClean"
+      },
+      yAxis: {
+        title: "Current<br>Climbers",
+        fontSize: "1.5em",
+        tickPixelInterval: 100,
+      },
+    });
+  </script>
+</div>

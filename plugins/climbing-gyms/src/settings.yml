@@ -1,0 +1,26 @@
+---
+strategy: polling
+no_screen_padding: "no"
+dark_mode: "no"
+static_data: ""
+polling_verb: get
+polling_url: https://rock-gym-pro-capacity.andrewleung104.workers.dev/
+polling_headers: Content-Type=application/json&Authorization=Bearer {{ access_token }}
+polling_body: ""
+id: 128020
+custom_fields:
+  - keyname: author_bio
+    name: About This Plugin
+    field_type: author_bio
+    description: Bouldering gym capacity based on tquin's original plugin.
+    github_url: https://github.com/andrejleung/trmnl
+  - keyname: access_token
+    name: Access Token
+    field_type: string
+    description: Access token to authenticate with the worker.
+  - keyname: gyms
+    name: Gyms
+    field_type: string
+    description: Comma-delimited list of three-character gym-codes to display capacities for, limit of four.
+name: Bouldering Gym Capacities
+refresh_interval: 15

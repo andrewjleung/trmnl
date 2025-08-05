@@ -1,0 +1,43 @@
+<div class="view view--full">
+  {% render "gauge_setup" %}
+  <script>
+    var opts = {
+      height: "50%",
+      // tick marks
+      labels: {
+        distance: 18,
+        style: {
+          fontSize: "1em"
+        }
+      },
+      // center text
+      series: {
+        fontSize: "2em",
+        fontWeight: "550",
+        fontFamily: "NicoClean"
+      },
+      yAxis: {
+        title: "Current<br>Climbers",
+        fontSize: "1em",
+        tickPixelInterval: 100,
+      },
+    };
+  </script>
+
+  <div class="layout layout--col layout--left layout--center-y">
+    {% unless gyms %}
+      <span class="title">Failed to fetch capacity from RockGymPro...</span>
+    {% else %}
+      <div class="flex flex--col flex--left">
+        {% assign gym_ids = trmnl.plugin_settings.custom_fields_values.gyms | split: "," %}
+        {% for id in gym_ids limit: 4 %}
+          {% assign gym = gyms | where: "id", id | first %}
+          {% render "gauge", gym: gym %}
+        {% endfor %}
+      </div>
+    {% endunless %}
+  </div>
+
+  {% render "title_bar", trmnl: trmnl %}
+
+</div>
