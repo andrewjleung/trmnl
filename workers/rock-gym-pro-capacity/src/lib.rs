@@ -6,6 +6,14 @@ use worker::*;
 const GYM_ID: &str = "dd60512aa081d8b38fff4ddbbd364a54";
 const ROCK_GYM_PRO_BASE_URL: &str = "https://portal.rockgympro.com";
 
+#[derive(Deserialize, Serialize, Clone)]
+struct GymCapacity {
+    id: String,
+    name: String,
+    capacity: u32,
+    count: u32,
+}
+
 #[event(start)]
 fn start() {
     console_error_panic_hook::set_once();
@@ -45,15 +53,30 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
         None => return Response::error("Failed to fetch RockGymPro data", 500),
     };
 
-    let rgp_data_unparsed = match parse_html(&html_text) {
+    let rgp_data_unparsed = match parse_html_capacities(&html_text) {
         Some(rgp_data_unparsed) => rgp_data_unparsed,
         None => return Response::error("Failed to read RockGymPro data", 500),
     };
+
+    let facility_names = parse_html_facility_names(&html_text);
 
     let rgp_data = match deserialize_rgp_data(&rgp_data_unparsed) {
         Some(rgp_data) => rgp_data,
         None => return Response::error("Failed to parse RockGymPro data", 500),
     };
+
+    let rgp_data = HashMap::from([(
+        "gyms",
+        rgp_data
+            .iter()
+            .map(|(gym, data)| GymCapacity {
+                id: gym.to_owned(),
+                name: facility_names.get(gym).unwrap_or(gym).to_owned(),
+                count: data.count,
+                capacity: data.capacity,
+            })
+            .collect::<Vec<GymCapacity>>(),
+    )]);
 
     match json5::to_string(&rgp_data) {
         Ok(json_str) => Response::ok(json_str),
@@ -87,10 +110,10 @@ async fn get_html_text() -> Option<String> {
     Some(html_text)
 }
 
-fn parse_html(html_text: &str) -> Option<String> {
+fn parse_html_capacities(html_text: &str) -> Option<String> {
     let document = scraper::Html::parse_document(html_text);
     let script_selector = Selector::parse("script").unwrap();
-    let re = regex::Regex::new(r"(?s)var\s+data\s*?=\s*?(\{.*?\})\;").unwrap();
+    let capacities_re = regex::Regex::new(r"(?s)var\s+data\s*?=\s*?(\{.*?\})\;").unwrap();
 
     for script in document.select(&script_selector) {
         let script_text = script.text().collect::<Vec<_>>().join("");
@@ -100,12 +123,32 @@ fn parse_html(html_text: &str) -> Option<String> {
         }
 
         // Group[0] is the full string
-        if let Some(match_) = re.captures(&script_text) {
+        if let Some(match_) = capacities_re.captures(&script_text) {
             return Some(match_[1].to_string());
         };
     }
 
     None
+}
+
+fn parse_html_facility_names(html_text: &str) -> HashMap<String, String> {
+    let document = scraper::Html::parse_document(html_text);
+    let option_selector = Selector::parse("option").unwrap();
+
+    document
+        .select(&option_selector)
+        .filter_map(|option| {
+            if let Some(value) = option.value().attr("value") {
+                if value.is_empty() {
+                    return None;
+                }
+
+                return Some((value.to_owned(), option.inner_html()));
+            }
+
+            None
+        })
+        .collect::<HashMap<String, String>>()
 }
 
 #[derive(Deserialize, Serialize, Clone)]
