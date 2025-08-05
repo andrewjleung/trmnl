@@ -1,7 +1,6 @@
-use scraper::error::SelectorErrorKind;
-use scraper::{Html, Selector};
+use scraper::Selector;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::result::Result::{self as StdResult, Err as StdErr, Ok as StdOk};
 use worker::*;
 
 const GYM_ID: &str = "dd60512aa081d8b38fff4ddbbd364a54";
@@ -13,43 +12,110 @@ fn start() {
 }
 
 #[event(fetch)]
-async fn fetch(req: Request, _env: Env, _ctx: Context) -> Result<Response> {
+async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
+    let authorization_header = match req.headers().get("Authorization") {
+        Ok(Some(value)) => value,
+        _ => return Response::error("Unauthorized", 401),
+    };
+
+    let token = match authorization_header.strip_prefix("Bearer ") {
+        Some(token) => token,
+        None => return Response::error("Unauthorized", 401),
+    };
+
+    if token != env.secret("ACCESS_TOKEN")?.to_string() {
+        return Response::error("Unauthorized", 401);
+    }
+
+    let content_type = match get_content_type(&req) {
+        Some(content_type) => content_type,
+        None => return Response::error("Missing content-type header", 400),
+    };
+
+    if !content_type.contains("application/json") {
+        return Response::error("Invalid content type", 415);
+    }
+
     if !matches!(req.method(), Method::Get) {
         return Response::error("Method Not Allowed", 405);
     }
 
-    Response::error("Bad Request", 400)
-}
+    let html_text = match get_html_text().await {
+        Some(html_data) => html_data,
+        None => return Response::error("Failed to fetch RockGymPro data", 500),
+    };
 
-struct Occupancy {
-    count: u16,
-    capacity: u16,
-}
+    let rgp_data_unparsed = match parse_html(&html_text) {
+        Some(rgp_data_unparsed) => rgp_data_unparsed,
+        None => return Response::error("Failed to read RockGymPro data", 500),
+    };
 
-enum WorkerError {
-    RequestError(reqwest::Error),
-}
+    let rgp_data = match deserialize_rgp_data(&rgp_data_unparsed) {
+        Some(rgp_data) => rgp_data,
+        None => return Response::error("Failed to parse RockGymPro data", 500),
+    };
 
-impl From<reqwest::Error> for WorkerError {
-    fn from(error: reqwest::Error) -> Self {
-        WorkerError::RequestError(error)
+    match json5::to_string(&rgp_data) {
+        Ok(json_str) => Response::ok(json_str),
+        Err(e) => Response::error(format!("Failed to serialise data: {e}"), 500),
     }
 }
 
-async fn fetch_occupancies() -> StdResult<HashMap<String, Occupancy>, WorkerError> {
-    let url = format!("{ROCK_GYM_PRO_BASE_URL}/portal/public/{GYM_ID}/occupancy");
+fn get_content_type(req: &Request) -> Option<String> {
+    let content_type = match req.headers().get("content-type") {
+        Ok(content_type) => match content_type {
+            Some(content_type) => content_type,
+            None => "".to_string(),
+        },
+        Err(_) => return None,
+    };
 
-    let response = reqwest::Client::new()
-        .get(url)
-        .header("Accept", "text/html")
-        .send()
-        .await?
-        .text()
-        .await?;
-
-    let document = Html::parse_document(&response);
-    // let script_selector = Selector::parse("script")?;
-
-    Ok(HashMap::new())
+    Some(content_type)
 }
 
+async fn get_html_text() -> Option<String> {
+    let html_url = format!("{ROCK_GYM_PRO_BASE_URL}/portal/public/{GYM_ID}/occupancy");
+
+    let html_text = match reqwest::get(html_url).await {
+        Ok(body) => match body.text().await {
+            Ok(html_text) => html_text,
+            Err(_) => return None,
+        },
+        Err(_) => return None,
+    };
+
+    Some(html_text)
+}
+
+fn parse_html(html_text: &str) -> Option<String> {
+    let document = scraper::Html::parse_document(html_text);
+    let script_selector = Selector::parse("script").unwrap();
+    let re = regex::Regex::new(r"(?s)var\s+data\s*?=\s*?(\{.*?\})\;").unwrap();
+
+    for script in document.select(&script_selector) {
+        let script_text = script.text().collect::<Vec<_>>().join("");
+
+        if !script_text.contains("var data =") {
+            continue;
+        }
+
+        // Group[0] is the full string
+        if let Some(match_) = re.captures(&script_text) {
+            return Some(match_[1].to_string());
+        };
+    }
+
+    None
+}
+
+#[derive(Deserialize, Serialize, Clone)]
+struct RGPData {
+    capacity: u32,
+    count: u32,
+}
+
+fn deserialize_rgp_data(rgp_data_unparsed: &str) -> Option<HashMap<String, RGPData>> {
+    // The HTML response contains JavaScript, not real JSON
+    // json5 is more lenient than serde which only accepts strict compliance
+    json5::from_str(rgp_data_unparsed).ok()
+}
