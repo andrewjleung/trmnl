@@ -1,17 +1,17 @@
 ---
 strategy: polling
-no_screen_padding: 'no'
-dark_mode: 'no'
-static_data: 
+no_screen_padding: "no"
+dark_mode: "no"
+static_data:
 polling_verb: get
 polling_url: https://api.hevyapp.com/v1/workouts?page=1&pageSize=1
 polling_headers: accept=application/json&api-key={{ api_key }}
-polling_body: ''
+polling_body: ""
 id: 100617
 custom_fields:
-- keyname: api_key
-  name: API Key
-  field_type: string
-  description: Hevy API key
+    - keyname: api_key
+      name: API Key
+      field_type: string
+      description: Hevy API key
 name: Hevy
 refresh_interval: 1440

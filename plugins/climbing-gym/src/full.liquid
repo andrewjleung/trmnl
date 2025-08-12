@@ -1,28 +1,28 @@
 <div class="view view--full">
-  {% render "gauge_setup", trmnl: trmnl, count: count, capacity: capacity %}
-  {% render "title_bar", trmnl: trmnl %}
+    {% render 'gauge_setup', trmnl: trmnl, count: count, capacity: capacity %}
+    {% render 'title_bar', trmnl: trmnl %}
 
-  <script>
-    createGauge(count, capacity, {
-      height: "56%",
-      // tick marks
-      labels: {
-        distance: 23,
-        style: {
-          fontSize: "1.5em"
-        }
-      },
-      // center text
-      series: {
-        fontSize: "4em",
-        fontWeight: "550",
-        fontFamily: "NicoClean"
-      },
-      yAxis: {
-        title: "Current<br>Climbers",
-        fontSize: "2em",
-        tickPixelInterval: 100,
-      },
-    });
-  </script>
+    <script>
+        createGauge(count, capacity, {
+            height: '56%',
+            // tick marks
+            labels: {
+                distance: 23,
+                style: {
+                    fontSize: '1.5em',
+                },
+            },
+            // center text
+            series: {
+                fontSize: '4em',
+                fontWeight: '550',
+                fontFamily: 'NicoClean',
+            },
+            yAxis: {
+                title: 'Current<br>Climbers',
+                fontSize: '2em',
+                tickPixelInterval: 100,
+            },
+        });
+    </script>
 </div>

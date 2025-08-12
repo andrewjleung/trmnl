@@ -1,45 +1,41 @@
 <div class="view view--half_vertical">
-  {% if workouts.size < 1 %}
-    <div class="layout layout--col">
-      <span class="title">
-        No workouts found...
-      </span>
-      <span class="description">
-        Get lifting!
-      </span>
-    </div>
-  {% else %}
-    <div class="layout layout--col layout--left">
-      <div class="flex flex--center-y stretch">
-        <div class="list" data-list-limit="true" data-list-hidden-count="true" data-list-max-columns="1">
-          {% for exercise in workouts[0].exercises %}
-            <div class="item">
-              <div class="meta">
-                <span class="index">{{ forloop.index }}</span>
-              </div>
-              <div class="content">
-                <span class="title title--small">{{ exercise.title }}</span>
-
-                {% assign normal_sets = exercise.sets | where: "type", "normal" %}
-                {% if normal_sets.size > 0 %}
-                  <div class="flex gap--small">
-                    {% for set in normal_sets  %}
-                      {% comment %} handle distance/duration {% endcomment %}
-                      {% render "set", set: set, small: true %}
-                    {% endfor %}
-                  </div>
-                {% endif %} 
-
-                {% if exercise.notes %}
-                  <span class="description clamp--2">{{ exercise.notes }}</span>
-                {% endif %} 
-              </div>
-            </div>
-          {% endfor %}
+    {% if workouts.size < 1 %}
+        <div class="layout layout--col">
+            <span class="title"> No workouts found... </span>
+            <span class="description"> Get lifting! </span>
         </div>
-      </div>
-    </div>
-  {% endif %}
+    {% else %}
+        <div class="layout layout--col layout--left">
+            <div class="flex flex--center-y stretch">
+                <div class="list" data-list-limit="true" data-list-hidden-count="true" data-list-max-columns="1">
+                    {% for exercise in workouts[0].exercises %}
+                        <div class="item">
+                            <div class="meta">
+                                <span class="index">{{ forloop.index }}</span>
+                            </div>
+                            <div class="content">
+                                <span class="title title--small">{{ exercise.title }}</span>
 
-  {% render "title_bar", trmnl: trmnl, workouts: workouts, no_title: true %}
+                                {% assign normal_sets = exercise.sets | where: 'type', 'normal' %}
+                                {% if normal_sets.size > 0 %}
+                                    <div class="flex gap--small">
+                                        {% for set in normal_sets %}
+                                            {% comment %} handle distance/duration {% endcomment %}
+                                            {% render 'set', set: set, small: true %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if exercise.notes %}
+                                    <span class="description clamp--2">{{ exercise.notes }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% render 'title_bar', trmnl: trmnl, workouts: workouts, no_title: true %}
 </div>

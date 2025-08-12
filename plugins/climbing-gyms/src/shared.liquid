@@ -3,21 +3,21 @@
 
 {% template gauge %}
 <div class="">
-  <div class="title title--small">{{ gym.name }}</div>
-  <div class="bg--gray-4 w--16 h--16" style="border-radius:10px"></div>
+    <div class="title title--small">{{ gym.name }}</div>
+    <div class="bg--gray-4 w--16 h--16" style="border-radius:10px"></div>
 </div>
 {% endtemplate %}
 
 {% template title_bar %}
 <div class="title_bar">
-  <img class="image-dither w--6 h--6" src="https://movementgyms.com/favicon.ico" />
+    <img class="image-dither w--6 h--6" src="https://movementgyms.com/favicon.ico">
 
-  <span class="title">
-    {{ trmnl.plugin_settings.instance_name }}
-  </span>
+    <span class="title">
+        {{ trmnl.plugin_settings.instance_name }}
+    </span>
 
-  <span class="instance">
-    As of {{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%I:%M%p" | }}
-  </span>
+    <span class="instance">
+        As of {{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%I:%M%p" | }}
+    </span>
 </div>
 {% endtemplate %}

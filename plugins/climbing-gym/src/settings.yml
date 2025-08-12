@@ -1,28 +1,28 @@
 ---
 strategy: polling
-no_screen_padding: 'no'
-dark_mode: 'no'
-static_data: ''
+no_screen_padding: "no"
+dark_mode: "no"
+static_data: ""
 polling_verb: get
 polling_url: https://trmnl-bouldering-worker.hello-a31.workers.dev?id={{ id }}&gym_id={{ gym_id }}
 polling_headers: Content-Type=application/json
-polling_body: ''
+polling_body: ""
 id: 128020
 custom_fields:
-- keyname: author_bio
-  name: About This Plugin
-  field_type: author_bio
-  description: Bouldering gym capacity based on tquin's original plugin.
-  github_url: https://github.com/tquin/trmnl-bouldering
-- keyname: id
-  name: RockGymPro ID
-  field_type: string
-  placeholder: f40dc9c0cbd9d67d35431dcd0581baac
-- keyname: gym_id
-  name: Gym (facility) ID
-  field_type: string
-  optional: true
-  default: ''
-  placeholder: AAA
+    - keyname: author_bio
+      name: About This Plugin
+      field_type: author_bio
+      description: Bouldering gym capacity based on tquin's original plugin.
+      github_url: https://github.com/tquin/trmnl-bouldering
+    - keyname: id
+      name: RockGymPro ID
+      field_type: string
+      placeholder: f40dc9c0cbd9d67d35431dcd0581baac
+    - keyname: gym_id
+      name: Gym (facility) ID
+      field_type: string
+      optional: true
+      default: ""
+      placeholder: AAA
 name: Bouldering Gym Capacity
 refresh_interval: 15

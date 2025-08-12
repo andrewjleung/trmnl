@@ -1,28 +1,28 @@
 <div class="view view--quadrant">
-  {% render "gauge_setup", trmnl: trmnl, count: count, capacity: capacity %}
-  {% render "title_bar", trmnl: trmnl %}
+    {% render 'gauge_setup', trmnl: trmnl, count: count, capacity: capacity %}
+    {% render 'title_bar', trmnl: trmnl %}
 
-  <script>
-    createGauge(count, capacity, {
-      height: "55%",
-      // tick marks
-      labels: {
-        distance: 15,
-        style: {
-          fontSize: "1em"
-        }
-      },
-      // center text
-      series: {
-        fontSize: "2em",
-        fontWeight: "400",
-        fontFamily: "NicoClean"
-      },
-      yAxis: {
-        title: "Current<br>Climbers",
-        fontSize: "16px",
-        tickPixelInterval: 100,
-      },
-    });
-  </script>
+    <script>
+        createGauge(count, capacity, {
+            height: '55%',
+            // tick marks
+            labels: {
+                distance: 15,
+                style: {
+                    fontSize: '1em',
+                },
+            },
+            // center text
+            series: {
+                fontSize: '2em',
+                fontWeight: '400',
+                fontFamily: 'NicoClean',
+            },
+            yAxis: {
+                title: 'Current<br>Climbers',
+                fontSize: '16px',
+                tickPixelInterval: 100,
+            },
+        });
+    </script>
 </div>

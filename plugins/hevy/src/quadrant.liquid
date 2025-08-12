@@ -1,29 +1,31 @@
 <div class="view view--quadrant">
-  <div class="layout layout--col">
-    {% if workouts.size < 1 %}
-      <span class="title">
-        No workouts found...
-      </span>
-      <span class="description">
-        Get lifting!
-      </span>
-    {% else %}
-      <div class="flex flex--center-y w--full stretch-y">
-        <div class="list" data-list-max-height="150" data-list-limit="true" data-list-hidden-count="true" data-list-max-columns="1">
-          {% for exercise in workouts[0].exercises %}
-            <div class="item">
-              <div class="meta">
-                <span class="index">{{ forloop.index }}</span>
-              </div>
-              <div class="content">
-                <span class="title title--small">{{ exercise.title }}</span>
-              </div>
+    <div class="layout layout--col">
+        {% if workouts.size < 1 %}
+            <span class="title"> No workouts found... </span>
+            <span class="description"> Get lifting! </span>
+        {% else %}
+            <div class="flex flex--center-y w--full stretch-y">
+                <div
+                    class="list"
+                    data-list-max-height="150"
+                    data-list-limit="true"
+                    data-list-hidden-count="true"
+                    data-list-max-columns="1"
+                >
+                    {% for exercise in workouts[0].exercises %}
+                        <div class="item">
+                            <div class="meta">
+                                <span class="index">{{ forloop.index }}</span>
+                            </div>
+                            <div class="content">
+                                <span class="title title--small">{{ exercise.title }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
-  </div>
+        {% endif %}
+    </div>
 
-  {% render "title_bar", trmnl: trmnl, workouts: workouts, no_title: true %}
+    {% render 'title_bar', trmnl: trmnl, workouts: workouts, no_title: true %}
 </div>
