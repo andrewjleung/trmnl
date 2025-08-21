@@ -3,20 +3,37 @@
 ---
 # auto-reload when files change (`watch: false` to disable)
 watch:
-    - .trmnlp.yml
-    - src
+  - .trmnlp.yml
+  - src
 
 # values of custom fields (defined in src/settings.yml)
 custom_fields:
-    access_token: "y3Myux.ZhdWAexsedAE*yBe.3oyuP9pN"
-    gyms: "FTW,GVN,PLN,DSN"
+  access_token: "y3Myux.ZhdWAexsedAE*yBe.3oyuP9pN"
+  gyms: "FTW,GVN,PLN,DSN"
 
 time_zone: America/Chicago
 
 # override variables
 variables:
-    trmnl:
-        plugin_settings:
-            instance_name: "Movement Gyms"
-        user:
-            utc_offset: -21600
+  trmnl:
+    plugin_settings:
+      instance_name: "Movement Gyms"
+    user:
+      utc_offset: -21600
+  gyms:
+    - id: FTW
+      name: "Movement Fort Worth"
+      capacity: 50
+      count: 10
+    - id: GVN
+      name: "Movement Grapevine"
+      capacity: 50
+      count: 20
+    - id: PLN
+      name: "Movement Plano"
+      capacity: 50
+      count: 30
+    - id: DSN
+      name: "Movement Design District"
+      capacity: 50
+      count: 50

@@ -2,9 +2,20 @@
 {% endtemplate %}
 
 {% template gauge %}
-<div class="">
-    <div class="title title--small">{{ gym.name }}</div>
-    <div class="bg--gray-4 w--16 h--16" style="border-radius:10px"></div>
+<div class="item item--emphasis-{{ gym.count | times: 1.0 | divided_by: gym.capacity | times: 3 | round }} w--full">
+    <div class="meta"></div>
+    <div class="content">
+        <span class="title title--small">{{ gym.name }}</span>
+        <span class="description">{{ gym.count }} climbers</span>
+        <div class="progress-bar progress-bar--emphasis-2 progress-bar--small w--full mt--0.5">
+            <div class="track">
+                <div
+                    class="fill"
+                    style="width: {{ gym.count | times: 100 | divided_by: gym.capacity }}%"
+                ></div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endtemplate %}
 
@@ -17,7 +28,7 @@
     </span>
 
     <span class="instance">
-        As of {{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%I:%M%p" | }}
+        As of {{ trmnl.system.timestamp_utc | plus: trmnl.user.utc_offset | date: "%-I:%M%p" | }}
     </span>
 </div>
 {% endtemplate %}

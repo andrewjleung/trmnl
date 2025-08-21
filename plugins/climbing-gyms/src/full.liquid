@@ -1,34 +1,14 @@
 <div class="view view--full">
-    {% render 'gauge_setup' %}
-    <script>
-        var opts = {
-            height: '50%',
-            // tick marks
-            labels: {
-                distance: 18,
-                style: {
-                    fontSize: '1em',
-                },
-            },
-            // center text
-            series: {
-                fontSize: '2em',
-                fontWeight: '550',
-                fontFamily: 'NicoClean',
-            },
-            yAxis: {
-                title: 'Current<br>Climbers',
-                fontSize: '1em',
-                tickPixelInterval: 100,
-            },
-        };
-    </script>
-
+    {% comment %} TODO: get rid of this once there's a public URL  {% endcomment %}
+    <link
+        rel="stylesheet"
+        href="https://usetrmnl.com/assets/plugins-942585433948501e1513257a149d7db3b7b8491594c3fcc4be7b72595f2f6875.css"
+    >
     <div class="layout layout--col layout--left layout--center-y">
         {% unless gyms %}
             <span class="title">Failed to fetch capacity from RockGymPro...</span>
         {% else %}
-            <div class="flex flex--col flex--left">
+            <div class="flex flex--col flex--left gap--medium w--full">
                 {% assign gym_ids = trmnl.plugin_settings.custom_fields_values.gyms | split: ',' %}
                 {% for id in gym_ids limit: 4 %}
                     {% assign gym = gyms | where: 'id', id | first %}
