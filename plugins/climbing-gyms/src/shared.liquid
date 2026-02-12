@@ -2,9 +2,9 @@
 {% endtemplate %}
 
 {% template gauge %}
-<div class="item item--emphasis-{{ gym.count | times: 1.0 | divided_by: gym.capacity | times: 3 | round }} w--full">
+<div class="item item--emphasis-{{ gym.count | times: 1.0 | divided_by: gym.capacity | times: 3 | round }}">
     <div class="meta"></div>
-    <div class="content">
+    <div class="content w--full mr--4">
         <span class="title title--small">{{ gym.name }}</span>
         <span class="description">{{ gym.count }} climbers</span>
         <div class="progress-bar progress-bar--emphasis-2 progress-bar--small w--full mt--0.5">

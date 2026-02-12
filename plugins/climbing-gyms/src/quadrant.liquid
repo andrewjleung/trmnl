@@ -1,28 +1,27 @@
 <div class="view view--quadrant">
-    {% render 'gauge_setup', trmnl: trmnl, count: count, capacity: capacity %}
-    {% render 'title_bar', trmnl: trmnl %}
+    <div class="layout layout--col layout--left layout--center-y">
+        {% unless gyms %}
+            <span class="title">Failed to fetch capacity from RockGymPro...</span>
+        {% else %}
+            <div class="flex flex--col flex--left w--full h--full">
+                <div
+                    class="columns"
+                    data-overflow-max-cols="1"
+                    data-overflow-counter="true"
+                >
+                    <div class="column">
+                        {% assign gym_ids = trmnl.plugin_settings.custom_fields_values.gyms | split: ',' %}
+                        {% for id in gym_ids limit: 3 %}
+                            {% assign gym = gyms | where: 'id', id | first %}
+                            <div class="item">
+                                {% render 'gauge', gym: gym %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endunless %}
+    </div>
 
-    <script>
-        createGauge(count, capacity, {
-            height: '55%',
-            // tick marks
-            labels: {
-                distance: 15,
-                style: {
-                    fontSize: '1em',
-                },
-            },
-            // center text
-            series: {
-                fontSize: '2em',
-                fontWeight: '400',
-                fontFamily: 'NicoClean',
-            },
-            yAxis: {
-                title: 'Current<br>Climbers',
-                fontSize: '16px',
-                tickPixelInterval: 100,
-            },
-        });
-    </script>
+    {% render 'title_bar', trmnl: trmnl %}
 </div>
