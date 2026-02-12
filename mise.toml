@@ -1,8 +1,9 @@
 [tools]
-ruby = '3.4'
+ruby = "3.4"
+"gem:trmnl_preview" = "latest"
 
 [env]
-_.file = '.env'
+_.file = ".env"
 
 [tasks."bundle:install"]
 description = "Install gem dependencies"
